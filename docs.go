@@ -1,19 +1,26 @@
 package main
 
 import (
-	"fmt"
+	"math/rand"
+	"time"
 
+	"github.com/cnnrznn/docs/client"
 	"github.com/cnnrznn/docs/document"
 )
 
 func main() {
-	doc := document.New()
+	c := client.New()
+	in, out := c.Run()
 
-	doc.Insert('\n', 0, 0)
-	doc.Insert('C', 1, 1)
-	doc.Insert('o', 2, 2)
-	doc.Insert('n', 3, 3)
-	doc.Insert('n', 4, 4)
+	for i := 0; i < 100; i++ {
+		in <- document.Op{Pos: rand.Intn(i + 1),
+			Char: byte(rand.Intn(256)),
+			Type: 0}
+	}
 
-	fmt.Println(doc)
+	time.Sleep(5 * time.Second)
+
+	for i := 0; i < 100; i++ {
+		op := <-out
+	}
 }

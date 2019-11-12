@@ -39,8 +39,7 @@ func (d *Document) apply(op Op) {
 	}
 }
 
-func (d *Document) Insert(char byte, pos, version int) Op {
-	op := Op{Char: char, Pos: pos, Type: 0}
+func (d *Document) Operate(op Op, version int) Op {
 	for i := version; i < len(d.Log); i++ {
 		op.Transform(d.Log[i])
 	}
@@ -48,6 +47,7 @@ func (d *Document) Insert(char byte, pos, version int) Op {
 	if op.Type != 2 {
 		d.Log = append(d.Log, op)
 		d.apply(op)
+		d.Version++
 	}
 
 	return op
