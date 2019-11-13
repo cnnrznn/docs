@@ -18,8 +18,6 @@ func main() {
 			Type: 0}
 	}
 
-	time.Sleep(5 * time.Second)
-
 	for i := 0; i < 100; i++ {
 		op := <-out
 	}

@@ -7,8 +7,8 @@ import (
 )
 
 type Client struct {
-	Doc document.Document
-	Ops []document.Op
+	Doc   document.Document
+	Queue []document.Op
 }
 
 func New() *Client {
@@ -25,12 +25,20 @@ func (c *Client) Run() (input, output chan document.Op) {
 	return input, output
 }
 
+func (c *Client) pushNextOp() {
+	if len(c.Queue) == 0 {
+		return
+	}
+
+}
+
 func (c *Client) serve(input, output chan document.Op) {
 	for {
 		select {
 		case op := <-input:
 			fmt.Println("Received Op", op)
-			c.Ops = append(c.Ops, op)
+			c.Queue = append(c.Queue, op)
+			c.pushNextOp()
 			// do another case here for listening to the server
 		}
 	}
