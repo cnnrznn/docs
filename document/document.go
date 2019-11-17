@@ -10,10 +10,10 @@ type Document struct {
 }
 
 type Op struct {
-	Pos  int64
-    Version int64
-	Char byte
-	Type int // 0-insert, 1-delete
+	Pos     int64
+	Version int64
+	Char    byte
+	Type    int32 // 0-insert, 1-delete
 }
 
 func New() *Document {

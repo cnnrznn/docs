@@ -1,30 +1,34 @@
-package main
+package client
 
 import (
-    "context"
-	"fmt"
+	"context"
 
-    "google.golang.org/grpc"
 	pb "github.com/cnnrznn/docs/editor"
+	"google.golang.org/grpc"
 )
 
-func main() {
-    var opts []grpc.DialOption
-    opts = append(opts, grpc.WithInsecure())
+type Client struct {
+	Stub   pb.EditorClient
+	Stream pb.Editor_UpdateClient
+}
 
-    conn, err := grpc.Dial("localhost:8888", opts...)
-    if err != nil {
-        fmt.Println(err)
-        return
-    }
-    defer conn.Close()
+func New() (c *Client, err error) {
+	c = &Client{}
+	var opts []grpc.DialOption
+	opts = append(opts, grpc.WithInsecure())
 
-    client := pb.NewEditorClient(conn)
-    state, err := client.State(context.Background(), &pb.Nil{})
-    if err != nil {
-        fmt.Println(err)
-        return
-    }
+	conn, err := grpc.Dial("localhost:8888", opts...)
+	if err != nil {
+		return
+	}
 
-    fmt.Println(state)
+	client := pb.NewEditorClient(conn)
+	if err != nil {
+		return
+	}
+
+	c.Stub = client
+	c.Stream, err = c.Stub.Update(context.Background())
+
+	return
 }
