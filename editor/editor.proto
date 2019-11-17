@@ -9,7 +9,7 @@ message Op {
     int32 type = 1;
     int64 version = 2;
     int64 pos = 3;
-    int32 char = 4;
+    bytes char = 4;
 }
 
 message DocState {
