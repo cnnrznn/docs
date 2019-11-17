@@ -14,6 +14,8 @@ import (
 type editorServer struct {
     pb.UnimplementedEditorServer
 
+    // In the real world this would loaded from cold storage,
+    // authenticated, etc.
     doc document.Document
 }
 

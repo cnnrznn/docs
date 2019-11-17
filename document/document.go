@@ -11,6 +11,7 @@ type Document struct {
 
 type Op struct {
 	Pos  int64
+    Version int64
 	Char byte
 	Type int // 0-insert, 1-delete
 }
@@ -39,8 +40,8 @@ func (d *Document) apply(op Op) {
 	}
 }
 
-func (d *Document) Operate(op Op, version int) Op {
-	for i := version; i < len(d.Log); i++ {
+func (d *Document) Operate(op Op) Op {
+	for i := op.Version; i < int64(len(d.Log)); i++ {
 		op.Transform(d.Log[i])
 	}
 
