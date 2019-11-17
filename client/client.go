@@ -32,3 +32,7 @@ func New() (c *Client, err error) {
 
 	return
 }
+
+func (c *Client) Close() {
+	c.Stream.CloseSend()
+}

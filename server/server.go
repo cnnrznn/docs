@@ -18,9 +18,22 @@ type editorServer struct {
 	// In the real world this would loaded from cold storage,
 	// authenticated, etc.
 	doc document.Document
+
+	input chan document.Op
+}
+
+func (s *editorServer) run() {
+	for {
+		select {
+		case op := <-s.input:
+			s.doc.Operate(op)
+		}
+	}
 }
 
 func (s *editorServer) Update(stream pb.Editor_UpdateServer) error {
+	// add client to clients
+
 	for {
 		op, err := stream.Recv()
 		if err == io.EOF {
@@ -30,16 +43,16 @@ func (s *editorServer) Update(stream pb.Editor_UpdateServer) error {
 			return err
 		}
 
-		s.doc.Log = append(s.doc.Log, document.Op{Pos: op.Pos,
-			Version: op.Version,
-			Char:    byte(op.Char),
-			Type:    op.Type})
+		s.input <- document.Op{Type: int(op.Type),
+			Version: int(op.Version),
+			Pos:     int(op.Pos),
+			Char:    op.Char[0]}
 	}
 	return nil
 }
 
 func (s *editorServer) State(ctx context.Context, _ *pb.Nil) (*pb.DocState, error) {
-	return &pb.DocState{Version: s.doc.Version,
+	return &pb.DocState{Version: int64(s.doc.Version),
 		Buffer: s.doc.State}, nil
 }
 
@@ -50,7 +63,12 @@ func main() {
 		return
 	}
 
+	es := editorServer{}
+	es.input = make(chan document.Op)
+
+	go es.run()
+
 	grpcServer := grpc.NewServer()
-	pb.RegisterEditorServer(grpcServer, &editorServer{})
+	pb.RegisterEditorServer(grpcServer, &es)
 	grpcServer.Serve(lis)
 }

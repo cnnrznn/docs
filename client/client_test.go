@@ -18,16 +18,7 @@ func fakeClient(wg *sync.WaitGroup) {
 		fmt.Println(err)
 		return
 	}
-
-	for i := 0; i < 100; i++ {
-		client.Stream.Send(&pb.Op{Type: 0,
-			Version: int64(i),
-			Pos:     int64(i),
-			Char:    int32('c')})
-		fmt.Println(i)
-	}
-
-	time.Sleep(5 * time.Second)
+	defer client.Close()
 }
 
 func TestClient(t *testing.T) {
