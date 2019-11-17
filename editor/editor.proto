@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+service Editor {
+    rpc Update(stream Op) returns (stream Op) {}
+    rpc State(Nil) returns (DocState) {}
+}
+
+message Op {
+    int32 type = 1;
+    int64 version = 2;
+    int64 pos = 3;
+    int32 char = 4;
+}
+
+message DocState {
+    int64 version = 1;
+    bytes buffer = 2;
+}
+
+message Nil {
+}

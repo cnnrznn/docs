@@ -6,11 +6,11 @@ package document
 type Document struct {
 	State   []byte
 	Log     []Op
-	Version int
+	Version int64
 }
 
 type Op struct {
-	Pos  int
+	Pos  int64
 	Char byte
 	Type int // 0-insert, 1-delete
 }
@@ -27,12 +27,12 @@ func (d *Document) apply(op Op) {
 	switch op.Type {
 	case 0:
 		d.State = append(d.State, ' ')
-		for i := len(d.State) - 1; i > op.Pos; i-- {
+		for i := int64(len(d.State)) - 1; i > op.Pos; i-- {
 			d.State[i] = d.State[i-1]
 		}
 		d.State[op.Pos] = op.Char
 	case 1:
-		for i := op.Pos; i < len(d.State)-1; i++ {
+		for i := op.Pos; i < int64(len(d.State))-1; i++ {
 			d.State[i] = d.State[i+1]
 		}
 		d.State = d.State[:len(d.State)-1]

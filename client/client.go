@@ -1,45 +1,30 @@
-package client
+package main
 
 import (
+    "context"
 	"fmt"
 
-	"github.com/cnnrznn/docs/document"
+    "google.golang.org/grpc"
+	pb "github.com/cnnrznn/docs/editor"
 )
 
-type Client struct {
-	Doc   document.Document
-	Queue []document.Op
-}
+func main() {
+    var opts []grpc.DialOption
+    opts = append(opts, grpc.WithInsecure())
 
-func New() *Client {
-	return &Client{}
-}
+    conn, err := grpc.Dial("localhost:8888", opts...)
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    defer conn.Close()
 
-func (c *Client) Run() (input, output chan document.Op) {
-	input, output = make(chan document.Op, 1024), make(chan document.Op, 1024)
+    client := pb.NewEditorClient(conn)
+    state, err := client.State(context.Background(), &pb.Nil{})
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
 
-	// TODO some initialization here with the server (current doc state, etc.)
-
-	go c.serve(input, output)
-
-	return input, output
-}
-
-func (c *Client) pushNextOp() {
-	if len(c.Queue) == 0 {
-		return
-	}
-
-}
-
-func (c *Client) serve(input, output chan document.Op) {
-	for {
-		select {
-		case op := <-input:
-			fmt.Println("Received Op", op)
-			c.Queue = append(c.Queue, op)
-			c.pushNextOp()
-			// do another case here for listening to the server
-		}
-	}
+    fmt.Println(state)
 }
