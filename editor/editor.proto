@@ -6,10 +6,11 @@ service Editor {
 }
 
 message Op {
-    int32 type = 1;
-    int64 version = 2;
-    int64 pos = 3;
-    bytes char = 4;
+    int64 sender = 1;
+    int32 type = 2;
+    int64 version = 3;
+    int64 pos = 4;
+    bytes char = 5;
 }
 
 message DocState {
