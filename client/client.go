@@ -2,7 +2,7 @@ package main
 
 import (
     "context"
-    //"fmt"
+    "io"
 	"log"
     "math/rand"
     "sync"
@@ -19,25 +19,54 @@ type Client struct {
     Ec pb.EditorClient
     Id int64
 
-    PushQ []pb.Op
-    Inflight *pb.Op
+    PushQ []document.Op
+    Inflight *document.Op
 }
 
 func (c *Client) Tick() {
     if c.Inflight == nil && len(c.PushQ) > 0 {
         c.Inflight = &c.PushQ[0]
+        c.Inflight.Version = c.Doc.Version
         c.PushQ = c.PushQ[1:]
 
-        if _, err := c.Ec.Send(context.Background(), c.Inflight); err != nil {
+        toSend := document.OpConvDoc(*c.Inflight)
+        if _, err := c.Ec.Send(context.Background(), &toSend); err != nil {
             log.Panic("Error pushing operation to server")
             // TODO more sofisticated error handling
         }
     }
 
     // fetch updates since current document version
-    // resolve updates agains pushq
-    // if updates match inflight, make inflight nil
-    // apply updates to local document
+    stream, err := c.Ec.Recv(context.Background(), &pb.Version{Version: int64(c.Doc.Version)})
+    if err != nil {
+        log.Panic(err)
+    }
+
+    for {
+        pbOp, err := stream.Recv()
+
+        if err == io.EOF {
+            break
+        }
+
+        if err != nil {
+            log.Panic(err)
+        }
+
+        op := document.OpConvPB(*pbOp)
+
+        if pbOp.Sender == c.Id {
+            c.Inflight = nil
+        } else {
+            for i:=0; i<len(c.PushQ); i++ {
+                copyOp := op
+                op.Transform(c.PushQ[i])
+                c.PushQ[i].Transform(copyOp)
+            }
+        }
+
+        c.Doc.Apply(op)
+    }
 }
 
 func randomBytes(size int) []byte {
@@ -53,11 +82,11 @@ func (c *Client) Run(wg *sync.WaitGroup) {
     defer wg.Done()
 
     for i:=0; i<100; i++ {
-        op := pb.Op{Sender: c.Id,
-                    Type: int32(rand.Intn(2)),
-                    Version: int64(i),
-                    Pos: int64(rand.Intn(100)),
-                    Char: []byte{randomBytes(1)[0]}}
+        op := document.Op{Sender: int(c.Id),
+                    Type: rand.Intn(2),
+                    Version: c.Doc.Version,
+                    Pos: 0, //int64(rand.Intn(10)),
+                    Char: randomBytes(1)[0]}
         //if _, err := c.Ec.Send(context.Background(), &op); err != nil {
         //    log.Printf("Send failed: %v, %v\n", op, err)
         //}
@@ -70,6 +99,8 @@ func (c *Client) Run(wg *sync.WaitGroup) {
 
     // one final tick
     c.Tick()
+
+    log.Println(&c.Doc)
 }
 
 func (c *Client) Close() {
