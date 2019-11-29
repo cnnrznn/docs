@@ -26,6 +26,9 @@ type editorServer struct {
 }
 
 func (s *editorServer) Join(ctx context.Context, req *pb.JoinRequest) (*pb.JoinResponse, error) {
+    s.mux.Lock()
+    defer s.mux.Unlock()
+
     var id int64
 
     for {
@@ -42,6 +45,9 @@ func (s *editorServer) Join(ctx context.Context, req *pb.JoinRequest) (*pb.JoinR
 }
 
 func (s *editorServer) Leave(ctx context.Context, req *pb.LeaveRequest) (*pb.LeaveResponse, error) {
+    s.mux.Lock()
+    defer s.mux.Unlock()
+
     if _, ok := s.ids[req.Id]; ok {
         s.ids[req.Id] = false
         log.Printf("%v left the server\n", req.Id)
@@ -53,6 +59,9 @@ func (s *editorServer) Leave(ctx context.Context, req *pb.LeaveRequest) (*pb.Lea
 }
 
 func (s *editorServer) State(ctx context.Context, _ *pb.Nil) (*pb.DocState, error) {
+    s.mux.Lock()
+    defer s.mux.Unlock()
+
 	return &pb.DocState{Version: int64(s.doc.Version),
 		Buffer: s.doc.State}, nil
 }
