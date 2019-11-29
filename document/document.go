@@ -32,8 +32,12 @@ func (d *Document) String() string {
 }
 
 func (d *Document) apply(op Op) {
-	if op.Pos > len(d.State) || op.Pos < 0 {
-		return
+	if op.Pos < 0 { return }
+
+    if op.Pos > len(d.State) {
+		newState := make([]byte, op.Pos + 1)
+        copy(newState, d.State)
+        d.State = newState
 	}
 
 	switch op.Type {
