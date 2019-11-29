@@ -3,7 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
-	"io"
+    "log"
+    "math/rand"
 	"net"
 
 	"google.golang.org/grpc"
@@ -15,40 +16,38 @@ import (
 type editorServer struct {
 	pb.UnimplementedEditorServer
 
+    ids map[int64]bool
+
 	// In the real world this would loaded from cold storage,
 	// authenticated, etc.
 	doc document.Document
-
-	input chan document.Op
 }
 
-func (s *editorServer) run() {
-	for {
-		select {
-		case op := <-s.input:
-			s.doc.Operate(op)
-		}
-	}
+func (s *editorServer) Join(ctx context.Context, req *pb.JoinRequest) (*pb.JoinResponse, error) {
+    var id int64
+
+    for {
+        id = rand.Int63()
+        if _, ok := s.ids[id]; !ok {
+            s.ids[id] = true
+            break
+        }
+    }
+
+    log.Printf("%v joined the server\n", id)
+
+    return &pb.JoinResponse{Id: id}, nil
 }
 
-func (s *editorServer) Update(stream pb.Editor_UpdateServer) error {
-	// add client to clients
+func (s *editorServer) Leave(ctx context.Context, req *pb.LeaveRequest) (*pb.LeaveResponse, error) {
+    if _, ok := s.ids[req.Id]; ok {
+        s.ids[req.Id] = false
+        log.Printf("%v left the server\n", req.Id)
+    } else {
+        log.Printf("Invalid leave request for %v\n", req.Id)
+    }
 
-	for {
-		op, err := stream.Recv()
-		if err == io.EOF {
-			return nil
-		}
-		if err != nil {
-			return err
-		}
-
-		s.input <- document.Op{Type: int(op.Type),
-			Version: int(op.Version),
-			Pos:     int(op.Pos),
-			Char:    op.Char[0]}
-	}
-	return nil
+    return &pb.LeaveResponse{}, nil
 }
 
 func (s *editorServer) State(ctx context.Context, _ *pb.Nil) (*pb.DocState, error) {
@@ -64,9 +63,7 @@ func main() {
 	}
 
 	es := editorServer{}
-	es.input = make(chan document.Op)
-
-	go es.run()
+    es.ids = make(map[int64]bool)
 
 	grpcServer := grpc.NewServer()
 	pb.RegisterEditorServer(grpcServer, &es)

@@ -10,11 +10,18 @@ type Document struct {
 }
 
 type Op struct {
+    Sender int
 	Type    int // 0-insert, 1-delete
 	Version int
 	Pos     int
 	Char    byte
 }
+
+const (
+    INSERT int = 0
+    DELETE int = 1
+    NULLOP int = 2
+)
 
 func New() *Document {
 	return &Document{}

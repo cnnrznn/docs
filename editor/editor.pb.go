@@ -24,6 +24,146 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
+type JoinRequest struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *JoinRequest) Reset()         { *m = JoinRequest{} }
+func (m *JoinRequest) String() string { return proto.CompactTextString(m) }
+func (*JoinRequest) ProtoMessage()    {}
+func (*JoinRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d780504008e31fd, []int{0}
+}
+
+func (m *JoinRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_JoinRequest.Unmarshal(m, b)
+}
+func (m *JoinRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_JoinRequest.Marshal(b, m, deterministic)
+}
+func (m *JoinRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_JoinRequest.Merge(m, src)
+}
+func (m *JoinRequest) XXX_Size() int {
+	return xxx_messageInfo_JoinRequest.Size(m)
+}
+func (m *JoinRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_JoinRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_JoinRequest proto.InternalMessageInfo
+
+type JoinResponse struct {
+	Id                   int64    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *JoinResponse) Reset()         { *m = JoinResponse{} }
+func (m *JoinResponse) String() string { return proto.CompactTextString(m) }
+func (*JoinResponse) ProtoMessage()    {}
+func (*JoinResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d780504008e31fd, []int{1}
+}
+
+func (m *JoinResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_JoinResponse.Unmarshal(m, b)
+}
+func (m *JoinResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_JoinResponse.Marshal(b, m, deterministic)
+}
+func (m *JoinResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_JoinResponse.Merge(m, src)
+}
+func (m *JoinResponse) XXX_Size() int {
+	return xxx_messageInfo_JoinResponse.Size(m)
+}
+func (m *JoinResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_JoinResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_JoinResponse proto.InternalMessageInfo
+
+func (m *JoinResponse) GetId() int64 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+type LeaveRequest struct {
+	Id                   int64    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *LeaveRequest) Reset()         { *m = LeaveRequest{} }
+func (m *LeaveRequest) String() string { return proto.CompactTextString(m) }
+func (*LeaveRequest) ProtoMessage()    {}
+func (*LeaveRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d780504008e31fd, []int{2}
+}
+
+func (m *LeaveRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_LeaveRequest.Unmarshal(m, b)
+}
+func (m *LeaveRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_LeaveRequest.Marshal(b, m, deterministic)
+}
+func (m *LeaveRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LeaveRequest.Merge(m, src)
+}
+func (m *LeaveRequest) XXX_Size() int {
+	return xxx_messageInfo_LeaveRequest.Size(m)
+}
+func (m *LeaveRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_LeaveRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_LeaveRequest proto.InternalMessageInfo
+
+func (m *LeaveRequest) GetId() int64 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+type LeaveResponse struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *LeaveResponse) Reset()         { *m = LeaveResponse{} }
+func (m *LeaveResponse) String() string { return proto.CompactTextString(m) }
+func (*LeaveResponse) ProtoMessage()    {}
+func (*LeaveResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d780504008e31fd, []int{3}
+}
+
+func (m *LeaveResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_LeaveResponse.Unmarshal(m, b)
+}
+func (m *LeaveResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_LeaveResponse.Marshal(b, m, deterministic)
+}
+func (m *LeaveResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LeaveResponse.Merge(m, src)
+}
+func (m *LeaveResponse) XXX_Size() int {
+	return xxx_messageInfo_LeaveResponse.Size(m)
+}
+func (m *LeaveResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_LeaveResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_LeaveResponse proto.InternalMessageInfo
+
 type Op struct {
 	Sender               int64    `protobuf:"varint,1,opt,name=sender,proto3" json:"sender,omitempty"`
 	Type                 int32    `protobuf:"varint,2,opt,name=type,proto3" json:"type,omitempty"`
@@ -39,7 +179,7 @@ func (m *Op) Reset()         { *m = Op{} }
 func (m *Op) String() string { return proto.CompactTextString(m) }
 func (*Op) ProtoMessage()    {}
 func (*Op) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d780504008e31fd, []int{0}
+	return fileDescriptor_7d780504008e31fd, []int{4}
 }
 
 func (m *Op) XXX_Unmarshal(b []byte) error {
@@ -107,7 +247,7 @@ func (m *DocState) Reset()         { *m = DocState{} }
 func (m *DocState) String() string { return proto.CompactTextString(m) }
 func (*DocState) ProtoMessage()    {}
 func (*DocState) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d780504008e31fd, []int{1}
+	return fileDescriptor_7d780504008e31fd, []int{5}
 }
 
 func (m *DocState) XXX_Unmarshal(b []byte) error {
@@ -142,6 +282,45 @@ func (m *DocState) GetBuffer() []byte {
 	return nil
 }
 
+type Version struct {
+	Version              int64    `protobuf:"varint,1,opt,name=version,proto3" json:"version,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Version) Reset()         { *m = Version{} }
+func (m *Version) String() string { return proto.CompactTextString(m) }
+func (*Version) ProtoMessage()    {}
+func (*Version) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d780504008e31fd, []int{6}
+}
+
+func (m *Version) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Version.Unmarshal(m, b)
+}
+func (m *Version) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Version.Marshal(b, m, deterministic)
+}
+func (m *Version) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Version.Merge(m, src)
+}
+func (m *Version) XXX_Size() int {
+	return xxx_messageInfo_Version.Size(m)
+}
+func (m *Version) XXX_DiscardUnknown() {
+	xxx_messageInfo_Version.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Version proto.InternalMessageInfo
+
+func (m *Version) GetVersion() int64 {
+	if m != nil {
+		return m.Version
+	}
+	return 0
+}
+
 type Nil struct {
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -152,7 +331,7 @@ func (m *Nil) Reset()         { *m = Nil{} }
 func (m *Nil) String() string { return proto.CompactTextString(m) }
 func (*Nil) ProtoMessage()    {}
 func (*Nil) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d780504008e31fd, []int{2}
+	return fileDescriptor_7d780504008e31fd, []int{7}
 }
 
 func (m *Nil) XXX_Unmarshal(b []byte) error {
@@ -174,29 +353,40 @@ func (m *Nil) XXX_DiscardUnknown() {
 var xxx_messageInfo_Nil proto.InternalMessageInfo
 
 func init() {
+	proto.RegisterType((*JoinRequest)(nil), "JoinRequest")
+	proto.RegisterType((*JoinResponse)(nil), "JoinResponse")
+	proto.RegisterType((*LeaveRequest)(nil), "LeaveRequest")
+	proto.RegisterType((*LeaveResponse)(nil), "LeaveResponse")
 	proto.RegisterType((*Op)(nil), "Op")
 	proto.RegisterType((*DocState)(nil), "DocState")
+	proto.RegisterType((*Version)(nil), "Version")
 	proto.RegisterType((*Nil)(nil), "Nil")
 }
 
 func init() { proto.RegisterFile("editor.proto", fileDescriptor_7d780504008e31fd) }
 
 var fileDescriptor_7d780504008e31fd = []byte{
-	// 209 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x54, 0x8f, 0x3f, 0x4b, 0xc5, 0x30,
-	0x14, 0xc5, 0x5f, 0x5e, 0x9a, 0xa8, 0x97, 0x0e, 0x92, 0xa1, 0x84, 0x4e, 0x25, 0x53, 0xa6, 0x20,
-	0xba, 0x8a, 0x93, 0xae, 0x2d, 0x44, 0xfc, 0x00, 0xfd, 0x93, 0x62, 0xa0, 0x34, 0x21, 0x8d, 0x82,
-	0xdf, 0x5e, 0x92, 0xd7, 0x0e, 0x5d, 0x2e, 0xe7, 0x5c, 0xee, 0x3d, 0x3f, 0x0e, 0x94, 0x66, 0xb2,
-	0xd1, 0x05, 0xe5, 0x83, 0x8b, 0x4e, 0x78, 0xb8, 0x76, 0x9e, 0x55, 0x40, 0x37, 0xb3, 0x4e, 0x26,
-	0x70, 0xd4, 0x20, 0x89, 0xf5, 0xee, 0x18, 0x83, 0x22, 0xfe, 0x79, 0xc3, 0xaf, 0x0d, 0x92, 0x44,
-	0x67, 0xcd, 0x38, 0xdc, 0xfd, 0x9a, 0xb0, 0x59, 0xb7, 0x72, 0x9c, 0x8f, 0x0f, 0xcb, 0x1e, 0x01,
-	0x7b, 0xb7, 0xf1, 0x22, 0x6f, 0x93, 0x4c, 0xff, 0xe3, 0x77, 0x1f, 0x38, 0x69, 0x90, 0x2c, 0x75,
-	0xd6, 0xe2, 0x15, 0xee, 0xdf, 0xdd, 0xf8, 0x19, 0xfb, 0x78, 0xca, 0x42, 0xe7, 0xac, 0x0a, 0xe8,
-	0xf0, 0x33, 0xcf, 0x26, 0x64, 0x76, 0xa9, 0x77, 0x27, 0x08, 0xe0, 0xd6, 0x2e, 0xcf, 0x6f, 0x40,
-	0x3f, 0x72, 0x0d, 0xc6, 0x81, 0x7e, 0xf9, 0x29, 0x85, 0x61, 0xd5, 0xf9, 0x3a, 0x0d, 0x71, 0x91,
-	0xe8, 0x09, 0xb1, 0x1a, 0xc8, 0x8d, 0x52, 0xa8, 0xd6, 0x2e, 0xf5, 0x83, 0x3a, 0xb0, 0xe2, 0x32,
-	0xd0, 0xdc, 0xfe, 0xe5, 0x3f, 0x00, 0x00, 0xff, 0xff, 0x82, 0xbf, 0xea, 0x20, 0x0d, 0x01, 0x00,
-	0x00,
+	// 311 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x91, 0x4f, 0x4b, 0x33, 0x31,
+	0x10, 0xc6, 0x37, 0xfb, 0xaf, 0x7d, 0xe7, 0xdd, 0xad, 0x32, 0x42, 0x59, 0xf7, 0x20, 0x25, 0x22,
+	0xec, 0x29, 0x88, 0x5e, 0x3d, 0xea, 0x45, 0xa4, 0x85, 0x2d, 0x78, 0x6f, 0xbb, 0x53, 0x0c, 0x94,
+	0x4d, 0xdc, 0xa4, 0x05, 0x3f, 0x90, 0xdf, 0x53, 0x36, 0x4d, 0xa1, 0x8b, 0x78, 0x9b, 0x27, 0xcf,
+	0x33, 0x93, 0xcc, 0x2f, 0x90, 0x51, 0x23, 0xad, 0xea, 0x84, 0xee, 0x94, 0x55, 0x3c, 0x87, 0xff,
+	0xaf, 0x4a, 0xb6, 0x35, 0x7d, 0xee, 0xc9, 0x58, 0x7e, 0x03, 0xd9, 0x51, 0x1a, 0xad, 0x5a, 0x43,
+	0x38, 0x81, 0x50, 0x36, 0x05, 0x9b, 0xb1, 0x2a, 0xaa, 0x43, 0xd9, 0xf4, 0xfe, 0x1b, 0xad, 0x0e,
+	0xe4, 0xf3, 0xbf, 0xfc, 0x0b, 0xc8, 0xbd, 0x7f, 0x1c, 0xc0, 0x35, 0x84, 0x0b, 0x8d, 0x53, 0x48,
+	0x0d, 0xb5, 0x0d, 0x75, 0x3e, 0xea, 0x15, 0x22, 0xc4, 0xf6, 0x4b, 0x53, 0x11, 0xce, 0x58, 0x95,
+	0xd4, 0xae, 0xc6, 0x02, 0x46, 0x07, 0xea, 0x8c, 0x54, 0x6d, 0x11, 0xb9, 0xf0, 0x49, 0xe2, 0x25,
+	0x44, 0x5a, 0x99, 0x22, 0x76, 0xa7, 0x7d, 0xd9, 0xf7, 0x6f, 0x3e, 0x56, 0x5d, 0x91, 0xcc, 0x58,
+	0x95, 0xd5, 0xae, 0xe6, 0x4f, 0x30, 0x7e, 0x56, 0x9b, 0xa5, 0x5d, 0xd9, 0xc1, 0x2c, 0x36, 0x9c,
+	0x35, 0x85, 0x74, 0xbd, 0xdf, 0x6e, 0xa9, 0x73, 0x77, 0x67, 0xb5, 0x57, 0xfc, 0x16, 0x46, 0xef,
+	0x3e, 0xf2, 0x67, 0x33, 0x4f, 0x20, 0x9a, 0xcb, 0xdd, 0xc3, 0x37, 0x83, 0xf4, 0xc5, 0xc1, 0xc4,
+	0x3b, 0x88, 0x7b, 0x6e, 0x98, 0x89, 0x33, 0x9a, 0x65, 0x2e, 0xce, 0x61, 0xf2, 0x00, 0x2b, 0x48,
+	0x1c, 0x1e, 0xcc, 0xc5, 0x39, 0xc6, 0x72, 0x22, 0x86, 0xd4, 0x02, 0x2c, 0x21, 0x39, 0xae, 0x10,
+	0x8b, 0xb9, 0xdc, 0x95, 0xff, 0xc4, 0x69, 0x27, 0x1e, 0xe0, 0x15, 0xc4, 0x4b, 0x6a, 0x1b, 0x8c,
+	0xc4, 0x42, 0x97, 0xce, 0xe7, 0x01, 0x5e, 0x43, 0x5c, 0xd3, 0xe6, 0x80, 0x63, 0xe1, 0xdf, 0x5f,
+	0xf6, 0x36, 0x0f, 0xee, 0xd9, 0x3a, 0x75, 0x5f, 0xfd, 0xf8, 0x13, 0x00, 0x00, 0xff, 0xff, 0x68,
+	0x5f, 0x99, 0x26, 0xfa, 0x01, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -211,8 +401,11 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type EditorClient interface {
-	Update(ctx context.Context, opts ...grpc.CallOption) (Editor_UpdateClient, error)
+	Join(ctx context.Context, in *JoinRequest, opts ...grpc.CallOption) (*JoinResponse, error)
+	Leave(ctx context.Context, in *LeaveRequest, opts ...grpc.CallOption) (*LeaveResponse, error)
 	State(ctx context.Context, in *Nil, opts ...grpc.CallOption) (*DocState, error)
+	Send(ctx context.Context, in *Op, opts ...grpc.CallOption) (*Nil, error)
+	Recv(ctx context.Context, in *Version, opts ...grpc.CallOption) (Editor_RecvClient, error)
 }
 
 type editorClient struct {
@@ -223,35 +416,22 @@ func NewEditorClient(cc *grpc.ClientConn) EditorClient {
 	return &editorClient{cc}
 }
 
-func (c *editorClient) Update(ctx context.Context, opts ...grpc.CallOption) (Editor_UpdateClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_Editor_serviceDesc.Streams[0], "/Editor/Update", opts...)
+func (c *editorClient) Join(ctx context.Context, in *JoinRequest, opts ...grpc.CallOption) (*JoinResponse, error) {
+	out := new(JoinResponse)
+	err := c.cc.Invoke(ctx, "/Editor/Join", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &editorUpdateClient{stream}
-	return x, nil
+	return out, nil
 }
 
-type Editor_UpdateClient interface {
-	Send(*Op) error
-	Recv() (*Op, error)
-	grpc.ClientStream
-}
-
-type editorUpdateClient struct {
-	grpc.ClientStream
-}
-
-func (x *editorUpdateClient) Send(m *Op) error {
-	return x.ClientStream.SendMsg(m)
-}
-
-func (x *editorUpdateClient) Recv() (*Op, error) {
-	m := new(Op)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
+func (c *editorClient) Leave(ctx context.Context, in *LeaveRequest, opts ...grpc.CallOption) (*LeaveResponse, error) {
+	out := new(LeaveResponse)
+	err := c.cc.Invoke(ctx, "/Editor/Leave", in, out, opts...)
+	if err != nil {
 		return nil, err
 	}
-	return m, nil
+	return out, nil
 }
 
 func (c *editorClient) State(ctx context.Context, in *Nil, opts ...grpc.CallOption) (*DocState, error) {
@@ -263,51 +443,114 @@ func (c *editorClient) State(ctx context.Context, in *Nil, opts ...grpc.CallOpti
 	return out, nil
 }
 
+func (c *editorClient) Send(ctx context.Context, in *Op, opts ...grpc.CallOption) (*Nil, error) {
+	out := new(Nil)
+	err := c.cc.Invoke(ctx, "/Editor/Send", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *editorClient) Recv(ctx context.Context, in *Version, opts ...grpc.CallOption) (Editor_RecvClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_Editor_serviceDesc.Streams[0], "/Editor/Recv", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &editorRecvClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type Editor_RecvClient interface {
+	Recv() (*Op, error)
+	grpc.ClientStream
+}
+
+type editorRecvClient struct {
+	grpc.ClientStream
+}
+
+func (x *editorRecvClient) Recv() (*Op, error) {
+	m := new(Op)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // EditorServer is the server API for Editor service.
 type EditorServer interface {
-	Update(Editor_UpdateServer) error
+	Join(context.Context, *JoinRequest) (*JoinResponse, error)
+	Leave(context.Context, *LeaveRequest) (*LeaveResponse, error)
 	State(context.Context, *Nil) (*DocState, error)
+	Send(context.Context, *Op) (*Nil, error)
+	Recv(*Version, Editor_RecvServer) error
 }
 
 // UnimplementedEditorServer can be embedded to have forward compatible implementations.
 type UnimplementedEditorServer struct {
 }
 
-func (*UnimplementedEditorServer) Update(srv Editor_UpdateServer) error {
-	return status.Errorf(codes.Unimplemented, "method Update not implemented")
+func (*UnimplementedEditorServer) Join(ctx context.Context, req *JoinRequest) (*JoinResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Join not implemented")
+}
+func (*UnimplementedEditorServer) Leave(ctx context.Context, req *LeaveRequest) (*LeaveResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Leave not implemented")
 }
 func (*UnimplementedEditorServer) State(ctx context.Context, req *Nil) (*DocState, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method State not implemented")
+}
+func (*UnimplementedEditorServer) Send(ctx context.Context, req *Op) (*Nil, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Send not implemented")
+}
+func (*UnimplementedEditorServer) Recv(req *Version, srv Editor_RecvServer) error {
+	return status.Errorf(codes.Unimplemented, "method Recv not implemented")
 }
 
 func RegisterEditorServer(s *grpc.Server, srv EditorServer) {
 	s.RegisterService(&_Editor_serviceDesc, srv)
 }
 
-func _Editor_Update_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(EditorServer).Update(&editorUpdateServer{stream})
-}
-
-type Editor_UpdateServer interface {
-	Send(*Op) error
-	Recv() (*Op, error)
-	grpc.ServerStream
-}
-
-type editorUpdateServer struct {
-	grpc.ServerStream
-}
-
-func (x *editorUpdateServer) Send(m *Op) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-func (x *editorUpdateServer) Recv() (*Op, error) {
-	m := new(Op)
-	if err := x.ServerStream.RecvMsg(m); err != nil {
+func _Editor_Join_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(JoinRequest)
+	if err := dec(in); err != nil {
 		return nil, err
 	}
-	return m, nil
+	if interceptor == nil {
+		return srv.(EditorServer).Join(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Editor/Join",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EditorServer).Join(ctx, req.(*JoinRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Editor_Leave_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LeaveRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EditorServer).Leave(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Editor/Leave",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EditorServer).Leave(ctx, req.(*LeaveRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _Editor_State_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -328,21 +571,71 @@ func _Editor_State_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Editor_Send_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Op)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EditorServer).Send(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Editor/Send",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EditorServer).Send(ctx, req.(*Op))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Editor_Recv_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(Version)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(EditorServer).Recv(m, &editorRecvServer{stream})
+}
+
+type Editor_RecvServer interface {
+	Send(*Op) error
+	grpc.ServerStream
+}
+
+type editorRecvServer struct {
+	grpc.ServerStream
+}
+
+func (x *editorRecvServer) Send(m *Op) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 var _Editor_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "Editor",
 	HandlerType: (*EditorServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
+			MethodName: "Join",
+			Handler:    _Editor_Join_Handler,
+		},
+		{
+			MethodName: "Leave",
+			Handler:    _Editor_Leave_Handler,
+		},
+		{
 			MethodName: "State",
 			Handler:    _Editor_State_Handler,
+		},
+		{
+			MethodName: "Send",
+			Handler:    _Editor_Send_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "Update",
-			Handler:       _Editor_Update_Handler,
+			StreamName:    "Recv",
+			Handler:       _Editor_Recv_Handler,
 			ServerStreams: true,
-			ClientStreams: true,
 		},
 	},
 	Metadata: "editor.proto",

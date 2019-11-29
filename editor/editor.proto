@@ -1,8 +1,27 @@
 syntax = "proto3";
 
 service Editor {
-    rpc Update(stream Op) returns (stream Op) {}
+    rpc Join(JoinRequest) returns (JoinResponse) {}
+    rpc Leave(LeaveRequest) returns (LeaveResponse) {}
+
     rpc State(Nil) returns (DocState) {}
+
+    rpc Send(Op) returns (Nil) {}
+    rpc Recv(Version) returns (stream Op) {}
+}
+
+message JoinRequest {
+}
+
+message JoinResponse {
+    int64 id = 1;
+}
+
+message LeaveRequest {
+    int64 id = 1;
+}
+
+message LeaveResponse {
 }
 
 message Op {
@@ -16,6 +35,10 @@ message Op {
 message DocState {
     int64 version = 1;
     bytes buffer = 2;
+}
+
+message Version {
+    int64 version = 1;
 }
 
 message Nil {
