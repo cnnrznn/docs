@@ -4,6 +4,7 @@
 package document
 
 import (
+    "fmt"
     "log"
 
     pb "github.com/cnnrznn/docs/editor"
@@ -29,6 +30,10 @@ const (
     NULLOP int = 2
 )
 
+func (op Op) String() string {
+    return fmt.Sprintf("{V:%v, T:%v, P:%v, C:%v}", op.Version, op.Type, op.Pos, op.Char)
+}
+
 func OpConvDoc(op Op) pb.Op {
     return pb.Op{Version: int64(op.Version),
                  Sender: int64(op.Sender),
@@ -43,10 +48,6 @@ func OpConvPB(op pb.Op) Op {
                        Type: int(op.Type),
                        Char: op.Char[0],
                        Pos: int(op.Pos)}
-}
-
-func New() *Document {
-	return &Document{}
 }
 
 func (d *Document) String() string {
