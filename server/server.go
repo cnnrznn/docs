@@ -6,6 +6,7 @@ import (
     "log"
     "math/rand"
 	"net"
+    "sync"
 
 	"google.golang.org/grpc"
 
@@ -21,6 +22,7 @@ type editorServer struct {
 	// In the real world this would loaded from cold storage,
 	// authenticated, etc.
 	doc document.Document
+    mux sync.Mutex
 }
 
 func (s *editorServer) Join(ctx context.Context, req *pb.JoinRequest) (*pb.JoinResponse, error) {
@@ -53,6 +55,22 @@ func (s *editorServer) Leave(ctx context.Context, req *pb.LeaveRequest) (*pb.Lea
 func (s *editorServer) State(ctx context.Context, _ *pb.Nil) (*pb.DocState, error) {
 	return &pb.DocState{Version: int64(s.doc.Version),
 		Buffer: s.doc.State}, nil
+}
+
+func (s *editorServer) Send(ctx context.Context, req *pb.Op) (*pb.Nil, error) {
+    s.mux.Lock()
+
+    s.doc.Operate(document.Op{Sender: int(req.Sender),
+                              Type: int(req.Type),
+                              Version: int(req.Version),
+                              Pos: int(req.Pos),
+                              Char: req.Char[0]})
+
+    s.mux.Unlock()
+
+    log.Println(len(s.doc.State), &s.doc)
+
+    return &pb.Nil{}, nil
 }
 
 func main() {
