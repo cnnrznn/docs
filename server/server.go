@@ -25,6 +25,22 @@ type editorServer struct {
     mux sync.Mutex
 }
 
+func opConvDoc(op document.Op) pb.Op {
+    return pb.Op{Version: int64(op.Version),
+                 Sender: int64(op.Sender),
+                 Type: int32(op.Type),
+                 Char: []byte{op.Char},
+                 Pos: int64(op.Pos)}
+}
+
+func opConvPB(op pb.Op) document.Op {
+    return document.Op{Version: int(op.Version),
+                       Sender: int(op.Sender),
+                       Type: int(op.Type),
+                       Char: op.Char[0],
+                       Pos: int(op.Pos)}
+}
+
 func (s *editorServer) Join(ctx context.Context, req *pb.JoinRequest) (*pb.JoinResponse, error) {
     var id int64
 
@@ -59,18 +75,26 @@ func (s *editorServer) State(ctx context.Context, _ *pb.Nil) (*pb.DocState, erro
 
 func (s *editorServer) Send(ctx context.Context, req *pb.Op) (*pb.Nil, error) {
     s.mux.Lock()
-
-    s.doc.Operate(document.Op{Sender: int(req.Sender),
-                              Type: int(req.Type),
-                              Version: int(req.Version),
-                              Pos: int(req.Pos),
-                              Char: req.Char[0]})
-
+    s.doc.Operate(opConvPB(*req))
     s.mux.Unlock()
 
     log.Println(len(s.doc.State), &s.doc)
 
     return &pb.Nil{}, nil
+}
+
+func (s *editorServer) Recv(version *pb.Version, stream pb.Editor_RecvServer) error {
+    s.mux.Lock()
+    defer s.mux.Unlock()
+
+    for i:=int(version.Version); i<len(s.doc.Log); i++ {
+        pbOp := opConvDoc(s.doc.Log[i])
+        if err := stream.Send(&pbOp); err != nil {
+            return err
+        }
+    }
+
+    return nil
 }
 
 func main() {
