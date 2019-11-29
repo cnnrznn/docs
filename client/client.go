@@ -6,6 +6,7 @@ import (
 	"log"
     "math/rand"
     "sync"
+    "time"
 
 	"github.com/cnnrznn/docs/document"
 	pb "github.com/cnnrznn/docs/editor"
@@ -19,13 +20,13 @@ type Client struct {
     Ec pb.EditorClient
     Id int64
 
-    PushQ []document.Op
+    PushQ []*document.Op
     Inflight *document.Op
 }
 
 func (c *Client) Tick() {
     if c.Inflight == nil && len(c.PushQ) > 0 {
-        c.Inflight = &c.PushQ[0]
+        c.Inflight = c.PushQ[0]
         c.Inflight.Version = c.Doc.Version
         c.PushQ = c.PushQ[1:]
 
@@ -60,7 +61,7 @@ func (c *Client) Tick() {
         } else {
             for i:=0; i<len(c.PushQ); i++ {
                 copyOp := op
-                op.Transform(c.PushQ[i])
+                op.Transform(*c.PushQ[i])
                 c.PushQ[i].Transform(copyOp)
             }
         }
@@ -81,7 +82,10 @@ func randomBytes(size int) []byte {
 func (c *Client) Run(wg *sync.WaitGroup) {
     defer wg.Done()
 
-    for i:=0; i<100; i++ {
+    rand.Seed(time.Now().UnixNano())
+
+    for i:=0; i<10; i++ {
+        time.Sleep(1 * time.Second)
         op := document.Op{Sender: int(c.Id),
                     Type: rand.Intn(2),
                     Version: c.Doc.Version,
@@ -91,11 +95,21 @@ func (c *Client) Run(wg *sync.WaitGroup) {
         //    log.Printf("Send failed: %v, %v\n", op, err)
         //}
 
-        c.PushQ = append(c.PushQ, op)
+        c.PushQ = append(c.PushQ, &op)
         c.Tick()
+
+        log.Println(&c.Doc)
+    }
+
+    for i:=0; i<10; i++ {
+        c.Tick()
+        time.Sleep(500 * time.Millisecond)
+
+        log.Println(&c.Doc)
     }
 
     // TODO wait a little
+    time.Sleep(2 * time.Second)
 
     // one final tick
     c.Tick()
@@ -137,6 +151,7 @@ func main() {
     }
     docClient.Doc.State = state.Buffer
     docClient.Doc.Version = int(state.Version)
+    log.Println(docClient.Doc)
 
     log.Printf("Done.\n")
 

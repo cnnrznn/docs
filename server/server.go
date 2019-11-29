@@ -68,10 +68,11 @@ func (s *editorServer) State(ctx context.Context, _ *pb.Nil) (*pb.DocState, erro
 
 func (s *editorServer) Send(ctx context.Context, req *pb.Op) (*pb.Nil, error) {
     s.mux.Lock()
-    s.doc.Operate(document.OpConvPB(*req))
-    s.mux.Unlock()
+    defer s.mux.Unlock()
 
-    log.Println(len(s.doc.State), &s.doc)
+    s.doc.Operate(document.OpConvPB(*req))
+
+    log.Println(&s.doc)
 
     return &pb.Nil{}, nil
 }

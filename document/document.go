@@ -92,11 +92,9 @@ func (d *Document) Operate(op Op) Op {
 		op.Transform(d.Log[i])
 	}
 
-	if op.Type != 2 {
-        op.Version = d.Version
-		d.Log = append(d.Log, op)
-		d.Apply(op)
-	}
+    op.Version = d.Version
+    d.Log = append(d.Log, op)
+    d.Apply(op)
 
 	return op
 }
