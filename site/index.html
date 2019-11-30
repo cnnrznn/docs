@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Google Doc Clone</title>
+
+    <link rel="stylesheet" href="quill/quill.snow.css">
+    <script src="quill/quill.min.js"></script>
+    <script src="client.js"></script>
+</head>
+
+<body>
+    <div id="editor">
+    </div>
+
+    <script>
+        var quill = new Quill('#editor', {
+            modules: {
+                toolbar: false,
+                //history: false,
+            },
+            formats: [],
+            theme: 'snow'
+        });
+
+        quill.on('text-change', function(delta, oldDelta, source) {
+            if (source == 'api') {
+                // do nothing
+            } else if (source == 'user') {
+                // do the googles
+                Client.Push(delta.ops);
+            }
+        });
+    </script>
+</body>
+</html>
