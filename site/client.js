@@ -1,6 +1,11 @@
+const pb = require('./editor_pb.js');
+const editor = require('./editor_grpc_web_pb.js');
+
 var Client = {
+    Id: -1,
     PushQ: [],
     Inflight: "",
+    Version: 0,
 };
 
 Client.Push = function(ops) {
@@ -15,14 +20,27 @@ Client.Push = function(ops) {
         } else if ("delete" in op) {
             type = 1
             for (i=0; i<op.delete; i++) {
-                this.PushQ.push({type:1, pos:start+i, c:' '})
+                var pbOp = new pb.Op();
+                pbOp.setSender(this.Id);
+                pbOp.setVersion(this.Version);
+                pbOp.setType(1);
+                pbOp.setPos(start + i);
+                this.PushQ.push(pbOp);
             }
         } else if ("insert" in op) {
             for (i=0; i<op.insert.length; i++) {
-                this.PushQ.push({type:0, pos:start+i, c:op.insert[i]})
+                var pbOp = new pb.Op();
+                pbOp.setSender(this.Id);
+                pbOp.setVersion(this.Version);
+                pbOp.setType(0);
+                pbOp.setPos(start + i);
+                pbOp.setChar(op.insert[i]);
+                this.PushQ.push(pbOp);
             }
         }
     }
 
     console.log(this.PushQ)
 };
+
+window.Client = Client
