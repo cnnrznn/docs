@@ -24,7 +24,7 @@ Client.Push = function(ops) {
                 pbOp.setSender(this.Id);
                 pbOp.setVersion(this.Version);
                 pbOp.setType(1);
-                pbOp.setPos(start + i);
+                pbOp.setPos(start);
                 this.PushQ.push(pbOp);
             }
         } else if ("insert" in op) {
