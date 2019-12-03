@@ -6,6 +6,8 @@ var Client = {
     PushQ: [],
     Inflight: "",
     Version: 0,
+
+    ec: null,
 };
 
 Client.Push = function(ops) {
@@ -42,5 +44,19 @@ Client.Push = function(ops) {
 
     console.log(this.PushQ)
 };
+
+Client.Tick = function() {
+};
+
+Client.ec = new editor.EditorClient('http://localhost:8888');
+console.log(Client.ec);
+Client.ec.join(new pb.JoinRequest(), {}, function(err, resp) {
+    console.log(err, resp);
+    Client.id = resp.getId();
+});
+
+Client.ec.state(new pb.Nil, {}, function(err, resp) {
+    console.log(err, resp);
+});
 
 window.Client = Client
