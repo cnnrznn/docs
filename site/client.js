@@ -25,6 +25,7 @@ Client.Push = function(ops) {
                 var pbOp = new pb.Op();
                 pbOp.setType(1);
                 pbOp.setPos(start);
+                pbOp.setChar(new TextEncoder().encode(" "));
                 this.PushQ.push(pbOp);
             }
         } else if ("insert" in op) {
@@ -86,7 +87,7 @@ Client.Tick = function() {
         this.Inflight = this.PushQ.shift();
         this.Inflight.setVersion(this.Version);
         this.Inflight.setSender(this.Id);
-        console.log(this.Inflight.toObject());
+        console.log("New Inflight:", this.Inflight.toObject());
 
         this.ec.send(Client.Inflight, {}, function(err, resp) {
             console.log("Did server receive inflight?:", err, resp);
@@ -98,19 +99,30 @@ Client.Tick = function() {
 
     var stream = this.ec.recv(version, {});
     stream.on('data', function(resp) {
-        console.log(resp.toObject());
+        console.log("Recv:", resp.toObject());
         if (resp.getSender() == Client.Id) {
             Client.Inflight = null;
+            console.log("Server got my op!", Client.Inflight);
         } else {
             for (i = 0; i<Client.PushQ.length; i++) {
                 copyOp = resp.toObject()
                 transform(resp, Client.PushQ[i].toObject())
                 transform(Client.PushQ[i], copyOp)
             }
+
+            // apply resp to quill
+            if (resp.getType() == 0) {
+                quill.insertText(resp.getPos(), new TextDecoder().decode(resp.getChar()));
+            } else if (resp.getType() == 1) {
+                quill.deleteText(resp.getPos(), 1);
+            }
         }
 
-        // apply resp to quill
-
+        if (Client.Version != resp.getVersion()) {
+            console.log("ERROR - document versions don't match");
+        } else {
+            Client.Version = Client.Version + 1
+        }
     });
     stream.on('status', function(status) {
     });
