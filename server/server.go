@@ -92,7 +92,7 @@ func (s *editorServer) Recv(version *pb.Version, stream pb.Editor_RecvServer) er
 }
 
 func main() {
-	lis, err := net.Listen("tcp", "localhost:8888")
+	lis, err := net.Listen("tcp", "0.0.0.0:9090")
 	if err != nil {
 		fmt.Println(err)
 		return
