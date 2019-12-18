@@ -16,28 +16,24 @@
     </div>
 
     <script>
-        var quill = new Quill('#editor', {
-            modules: {
-                toolbar: false,
-                //history: false,
-            },
-            formats: [],
-            theme: 'snow'
-        });
+    var quill = new Quill('#editor', {
+        modules: {
+            toolbar: false,
+            //history: false,
+        },
+        formats: [],
+        theme: 'snow'
+    });
 
-        quill.on('text-change', function(delta, oldDelta, source) {
-            if (source == 'api') {
-                // do nothing
-            } else if (source == 'user') {
-                // do the googles
-                Client.Push(delta.ops);
-            }
-        });
-
-        setTimeout(function tick() {
-            Client.Tick();
-            setTimeout(tick, 500);
-        }, 0);
+    quill.on('text-change', function(delta, oldDelta, source) {
+        if (source == 'api') {
+            // do nothing
+        } else if (source == 'user') {
+            // do the googles
+            Client.Push(delta.ops);
+        }
+    });
     </script>
+
 </body>
 </html>
