@@ -49,9 +49,9 @@ Client.Tick = function() {
 };
 
 Client.ec = new editor.EditorClient('http://localhost:8080');
-//console.log(Client.ec);
+
 Client.ec.join(new pb.JoinRequest(), {}, function(err, resp) {
-    console.log(err, resp);
+    console.log(err, resp.getId());
     Client.id = resp.getId();
 });
 
