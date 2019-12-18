@@ -44,19 +44,18 @@ Client.Push = function(ops) {
 Client.ec = new editor.EditorClient('http://localhost:8080');
 
 Client.ec.join(new pb.JoinRequest(), {}, function(err, resp) {
-    console.log(err, resp.getId());
+    console.log("Joined Server:", err, resp.getId());
     Client.Id = resp.getId();
 });
 
 Client.ec.state(new pb.Nil, {}, function(err, resp) {
     version = resp.getVersion();
     buffer = resp.getBuffer();
-    console.log(version, buffer);
+    console.log("DocState:", version, buffer);
 
     Client.Version = version
     if (buffer.length > 0) {
-        decoder = new TextDecoder('utf-8');
-        quill.setText(decoder.decode(buffer));
+        quill.setText(new TextDecoder().decode(buffer));
     }
 });
 
