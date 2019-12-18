@@ -59,6 +59,28 @@ Client.ec.state(new pb.Nil, {}, function(err, resp) {
     }
 });
 
+var transform = function(op, other) {
+    if (op.getType() == 0 && other.type == 0) {
+        if (other.pos <= op.getPos()) {
+            op.setPos(op.getPos() + 1)
+        }
+    } else if (op.getType() == 0 && other.type == 1) {
+        if (other.pos < op.getPos()) {
+            op.setPos(op.getPos() - 1)
+        }
+    } else if (op.getType() == 1 && other.type == 0) {
+        if (other.pos <= op.getPos()) {
+            op.setPos(op.getPos() + 1)
+        }
+    } else if (op.getType() == 1 && other.type == 1) {
+        if (other.pos < op.getPos()) {
+            op.setPos(op.getPos() - 1)
+        } else {
+            op.setType(2)
+        }
+    }
+};
+
 Client.Tick = function() {
     if (this.Inflight == null && this.PushQ.length > 0) {
         this.Inflight = this.PushQ.shift();
@@ -70,6 +92,30 @@ Client.Tick = function() {
             console.log("Did server receive inflight?:", err, resp);
         });
     }
+
+    var version = new pb.Version();
+    version.setVersion(this.Version);
+
+    var stream = this.ec.recv(version, {});
+    stream.on('data', function(resp) {
+        console.log(resp.toObject());
+        if (resp.getSender() == this.Id) {
+            this.Inflight = null;
+        } else {
+            for (i = 0; i<this.PushQ.length; i++) {
+                copyOp = resp.toObject()
+                transform(resp, this.PushQ[i].toObject())
+                transform(this.PushQ[i], copyOp)
+            }
+        }
+
+        // apply resp to quill
+
+    });
+    stream.on('status', function(status) {
+    });
+    stream.on('end', function(end) {
+    });
 };
 
 setTimeout(function tick() {
