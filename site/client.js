@@ -99,13 +99,13 @@ Client.Tick = function() {
     var stream = this.ec.recv(version, {});
     stream.on('data', function(resp) {
         console.log(resp.toObject());
-        if (resp.getSender() == this.Id) {
-            this.Inflight = null;
+        if (resp.getSender() == Client.Id) {
+            Client.Inflight = null;
         } else {
-            for (i = 0; i<this.PushQ.length; i++) {
+            for (i = 0; i<Client.PushQ.length; i++) {
                 copyOp = resp.toObject()
-                transform(resp, this.PushQ[i].toObject())
-                transform(this.PushQ[i], copyOp)
+                transform(resp, Client.PushQ[i].toObject())
+                transform(Client.PushQ[i], copyOp)
             }
         }
 
