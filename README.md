@@ -7,5 +7,3 @@ The purpose being for practice using Golang and gRPC. Both the Client and the Se
 ## The Algorithm
 Operational transform is an algorithm for performing realtime collaborative editing, typically of a shared document.
 Operations that are performed are "transformed" such that they result in the same view of the document on all clients once all updates are received.
-
-### A Simple Example: Insert
